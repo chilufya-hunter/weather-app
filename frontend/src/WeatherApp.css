@@ -89,14 +89,17 @@ body {
 .weather-app__current-weather,
 .weather-app__forecast {
   width: 100%;
+ 
 }
 
 .weather-app__current-weather-card,
 .weather-app__forecast-card {
-  background-color: rgba(255, 255, 255, 0.9);
+  /*background-color: rgba(255, 255, 255, 0.9);*/
+
   border-radius: 15px;
   padding: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+ 
 }
 
 .weather-app__section-title {
@@ -157,12 +160,12 @@ body {
 }
 
 .weather-app__button--history {
-  background-color: #2196F3;
+  background-color: #93b3cc;
   color: white;
 }
 
 .weather-app__button--history:hover {
-  background-color: #1e87db;
+  background-color: #b1c4d4;
 }
 
 /* Action buttons styles */
@@ -192,7 +195,7 @@ body {
 
 /* Selected history section styles */
 .weather-app__selected-history-section {
-  background-color: rgba(255, 255, 255, 0.9);
+  /*background-color: rgba(255, 255, 255, 0.9);*/
   border-radius: 15px;
   padding: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -277,4 +280,10 @@ body {
 .weather-app__forecast-info:nth-child(6)::before {
   content: '\f0d6'; /* money-bills icon */
 }
+
+.weather-app__weather-info:nth-child(7)::before,
+.weather-app__forecast-info:nth-child(7)::before {
+  content: '\f18d'; /* money-bills icon */
+}
+
 
