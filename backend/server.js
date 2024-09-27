@@ -4,6 +4,7 @@ const axios = require('axios');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const NodeCache = require('node-cache');
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -27,6 +28,9 @@ if (!WEATHERBIT_API_KEY) {
 // In-memory storage for users and favorites (replace with a database in production)
 let users = [];
 let favorites = {};
+
+// Initialize cache
+const cache = new NodeCache({ stdTTL: 600 }); // Cache for 10 minutes
 
 // Middleware to verify JWT token
 const authenticateToken = (req, res, next) => {
@@ -93,8 +97,16 @@ app.get('/favorites', authenticateToken, (req, res) => {
 app.get('/current-weather', authenticateToken, async (req, res) => {
   const city = req.query.city;
   const country = req.query.country;
+  const cacheKey = `current_${city}_${country}`;
 
   try {
+    // Check cache first
+    const cachedData = cache.get(cacheKey);
+    if (cachedData) {
+      return res.json(cachedData);
+    }
+
+    // If not in cache, fetch from API
     const response = await axios.get(`https://api.weatherbit.io/v2.0/current`, {
       params: {
         city: city,
@@ -102,6 +114,10 @@ app.get('/current-weather', authenticateToken, async (req, res) => {
         key: WEATHERBIT_API_KEY
       }
     });
+
+    // Store in cache
+    cache.set(cacheKey, response.data);
+
     res.json(response.data);
   } catch (error) {
     console.error('Error fetching current weather:', error);
@@ -109,27 +125,56 @@ app.get('/current-weather', authenticateToken, async (req, res) => {
   }
 });
 
-// Route to get the 16-day weather forecast for a specific city and country
+// Route to get the weather forecast for a specific city and country
 app.get('/forecast', authenticateToken, async (req, res) => {
   const city = req.query.city;
   const country = req.query.country;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 7; // Default to 7 days per page
+  const cacheKey = `forecast_${city}_${country}`;
 
   try {
-    const response = await axios.get(`https://api.weatherbit.io/v2.0/forecast/daily`, {
-      params: {
-        city: city,
-        country: country,
-        key: WEATHERBIT_API_KEY
+    // Check cache first
+    let forecastData = cache.get(cacheKey);
+
+    if (!forecastData) {
+      // If not in cache, fetch from API
+      const response = await axios.get(`https://api.weatherbit.io/v2.0/forecast/daily`, {
+        params: {
+          city: city,
+          country: country,
+          key: WEATHERBIT_API_KEY
+        }
+      });
+      forecastData = response.data;
+      // Store in cache
+      cache.set(cacheKey, forecastData);
+    }
+
+    // Paginate the data
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const paginatedData = forecastData.data.slice(startIndex, endIndex);
+
+    const paginatedResponse = {
+      ...forecastData,
+      data: paginatedData,
+      pagination: {
+        currentPage: page,
+        totalPages: Math.ceil(forecastData.data.length / limit),
+        totalItems: forecastData.data.length,
+        itemsPerPage: limit
       }
-    });
-    res.json(response.data);
+    };
+
+    res.json(paginatedResponse);
   } catch (error) {
     console.error('Error fetching forecast:', error);
     res.status(500).json({ message: 'Failed to fetch forecast data' });
   }
 });
 
-// Start the server and listen on all network interfaces (0.0.0.0) and specified port
+// Start the server
 app.listen(port, '0.0.0.0', () => {
   console.log(`Server started on http://localhost:${port}`);
 });
