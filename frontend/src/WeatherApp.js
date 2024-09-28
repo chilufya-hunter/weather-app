@@ -16,8 +16,6 @@ function WeatherApp() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState('');
   const [favorites, setFavorites] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
@@ -45,7 +43,7 @@ function WeatherApp() {
       alert('Registration successful. Please log in.');
     } catch (error) {
       console.error('Error registering:', error);
-      alert('Registration failed: ' + error.response.data);
+      alert('Registration failed.');
     }
   };
 
@@ -58,7 +56,7 @@ function WeatherApp() {
       fetchFavorites(response.data.accessToken);
     } catch (error) {
       console.error('Error logging in:', error);
-      alert('Login failed: ' + error.response.data);
+      alert('Login failed.');
     }
   };
 
@@ -80,28 +78,15 @@ function WeatherApp() {
     }
 
     try {
-      const response = await axios.get(`http://localhost:3001/forecast?city=${city}&country=${country}&page=${currentPage}&limit=3`, {
+      const response = await axios.get(`http://localhost:3001/forecast?city=${city}&country=${country}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setForecast(response.data);
-      setTotalPages(response.data.pagination.totalPages);
     } catch (error) {
       console.error('Error fetching forecast:', error);
     }
 
     setSearchHistory([...searchHistory, { city, country }]);
-  };
-
-  const handlePageChange = async (newPage) => {
-    setCurrentPage(newPage);
-    try {
-      const response = await axios.get(`http://localhost:3001/forecast?city=${city}&country=${country}&page=${newPage}&limit=3`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setForecast(response.data);
-    } catch (error) {
-      console.error('Error fetching forecast for new page:', error);
-    }
   };
 
   const handleAddFavorite = async () => {
@@ -127,7 +112,7 @@ function WeatherApp() {
     }
 
     try {
-      const response = await axios.get(`http://localhost:3001/forecast?city=${historyItem.city}&country=${historyItem.country}&page=1&limit=3`, {
+      const response = await axios.get(`http://localhost:3001/forecast?city=${historyItem.city}&country=${historyItem.country}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setSelectedForecast(response.data);
@@ -229,23 +214,6 @@ function WeatherApp() {
                           <p className="weather-app__forecast-info">Wind Speed: {day.wind_spd} m/s</p>
                         </div>
                       ))}
-                    </div>
-                    <div className="weather-app__pagination">
-                      <button 
-                        onClick={() => handlePageChange(currentPage - 1)} 
-                        disabled={currentPage === 1}
-                        className="weather-app__button weather-app__button--pagination"
-                      >
-                        Previous
-                      </button>
-                      <span className="weather-app__page-info">Page {currentPage} of {totalPages}</span>
-                      <button 
-                        onClick={() => handlePageChange(currentPage + 1)} 
-                        disabled={currentPage === totalPages}
-                        className="weather-app__button weather-app__button--pagination"
-                      >
-                        Next
-                      </button>
                     </div>
                   </div>
                 )}
