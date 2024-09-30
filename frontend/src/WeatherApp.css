@@ -281,9 +281,6 @@ body {
   content: '\f0d6'; /* money-bills icon */
 }
 
-.weather-app__weather-info:nth-child(7)::before,
-.weather-app__forecast-info:nth-child(7)::before {
-  content: '\f18d'; /* money-bills icon */
-}
+
 
 
