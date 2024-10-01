@@ -132,6 +132,11 @@ function WeatherApp() {
     <div className="weather-app">
       <header className="weather-app__header">
         <h1 className="weather-app__title">Weather App</h1>
+        {isLoggedIn && (
+          <button onClick={handleLogout} className="weather-app__button weather-app__button--logout">Logout</button>
+        )}
+      <img class="lnXdpd" alt="Google" height="200" width="300" src="./logo.png" />
+
       </header>
 
       <main className="weather-app__main">

@@ -9,15 +9,16 @@
     max-width: 300px; /* Adjust as needed */
   }
   
-  /* Media query for mobile responsiveness */
   @media (max-width: 480px) {
     .auth-modal {
-      left: 0;
-      transform: translateX(0);
-      width: 100%;
-      max-width: none; /* Remove max-width restriction */
+      position: fixed; /* Use fixed positioning for better centering */
+      left: 50%;        /* Center horizontally */
+      top: 50%;         /* Center vertically */
+      transform: translate(-50%, -50%); /* Adjust position for accurate centering */
+      width: 94%;       /* Take up 90% of the screen width */
+      max-width: none;  /* Remove max-width restriction */
     }
-    
+  
   }
   .auth-modal-content {
     background-color: #f4f4f4;
