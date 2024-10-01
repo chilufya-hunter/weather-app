@@ -90,7 +90,7 @@ app.get('/favorites', authenticateToken, (req, res) => {
 });
 
 // Route to get the current weather for a specific city and country
-app.get('/current-weather', authenticateToken, async (req, res) => {
+app.get('/current-weather', async (req, res) => {
   const city = req.query.city;
   const country = req.query.country;
 
@@ -110,7 +110,7 @@ app.get('/current-weather', authenticateToken, async (req, res) => {
 });
 
 // Route to get the 16-day weather forecast for a specific city and country
-app.get('/forecast', authenticateToken, async (req, res) => {
+app.get('/forecast', async (req, res) => {
   const city = req.query.city;
   const country = req.query.country;
 
