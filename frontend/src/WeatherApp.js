@@ -1,17 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './WeatherApp.css';
-import './AuthModal.css';
+import './AuthModal.css'
 
 function WeatherApp() {
+  // City and country for weather search
   const [city, setCity] = useState('');
   const [country, setCountry] = useState('');
+  
+  // Current weather and forecast data
   const [currentWeather, setCurrentWeather] = useState(null);
   const [forecast, setForecast] = useState(null);
+  
+  // Search history and selected history item
   const [searchHistory, setSearchHistory] = useState([]);
   const [selectedHistory, setSelectedHistory] = useState(null);
+  
+  // Selected current weather and forecast data
   const [selectedCurrentWeather, setSelectedCurrentWeather] = useState(null);
   const [selectedForecast, setSelectedForecast] = useState(null);
+  
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -131,11 +139,8 @@ function WeatherApp() {
   return (
     <div className="weather-app">
       <header className="weather-app__header">
-        <h1 className="weather-app__title">Weather App</h1>
-        {isLoggedIn && (
-          <button onClick={handleLogout} className="weather-app__button weather-app__button--logout">Logout</button>
-        )}
-      <img class="lnXdpd" alt="Google" height="200" width="300" src="./logo.png" />
+        <h1 className="weather-app__title">GNA </h1>
+      <img class="lnXdpd" alt="Google" height="180" width="300" src="./logo.png" />
 
       </header>
 

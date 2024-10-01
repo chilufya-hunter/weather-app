@@ -5,20 +5,29 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+// Create an instance of the Express.js framework
 const app = express();
+
+// Set the port to use for the server, defaulting to 3001 if no environment variable is set
 const port = process.env.PORT || 3001;
 
+// Enable CORS (Cross-Origin Resource Sharing) to allow requests from different origins
 app.use(cors());
+
+// Enable JSON parsing for request bodies
 app.use(express.json());
 
+// Set environment variables for the Weatherbit API key and JWT secret
 const WEATHERBIT_API_KEY = process.env.WEATHERBIT_API_KEY;
 const JWT_SECRET = process.env.JWT_SECRET;
 
+// Check if the JWT secret is set, and exit the process if it's not
 if (!JWT_SECRET) {
   console.error('JWT_SECRET is not set. Please set it in your environment variables.');
   process.exit(1);
 }
 
+// Check if the Weatherbit API key is set, and exit the process if it's not
 if (!WEATHERBIT_API_KEY) {
   console.error('WEATHERBIT_API_KEY is not set. Please set it in your environment variables.');
   process.exit(1);
@@ -30,13 +39,21 @@ let favorites = {};
 
 // Middleware to verify JWT token
 const authenticateToken = (req, res, next) => {
+  // Get the Authorization header from the request
   const authHeader = req.headers['authorization'];
+  
+  // Split the Authorization header into two parts (Bearer and token) and get the token
   const token = authHeader && authHeader.split(' ')[1];
-
+  
+  // If the token is null, return a 401 Unauthorized status code
   if (token == null) return res.sendStatus(401);
-
+  
+  // Verify the token using the JWT secret
   jwt.verify(token, JWT_SECRET, (err, user) => {
+    // If there's an error verifying the token, return a 403 Forbidden status code
     if (err) return res.sendStatus(403);
+    
+    // If the token is valid, set the user on the request object and call the next middleware function
     req.user = user;
     next();
   });
@@ -110,20 +127,27 @@ app.get('/current-weather', async (req, res) => {
 });
 
 // Route to get the 16-day weather forecast for a specific city and country
+// Route to get the 16-day weather forecast for a specific city and country
 app.get('/forecast', async (req, res) => {
+  // Get the city and country from the request query parameters
   const city = req.query.city;
   const country = req.query.country;
 
   try {
+    // Make a GET request to the Weatherbit API to fetch the 16-day weather forecast
     const response = await axios.get(`https://api.weatherbit.io/v2.0/forecast/daily`, {
+      // Pass the city, country, and Weatherbit API key as query parameters
       params: {
         city: city,
         country: country,
         key: WEATHERBIT_API_KEY
       }
     });
+
+    // Return the response data from the Weatherbit API as JSON
     res.json(response.data);
   } catch (error) {
+    // If there's an error fetching the forecast, log the error and return a 500 Internal Server Error status code
     console.error('Error fetching forecast:', error);
     res.status(500).json({ message: 'Failed to fetch forecast data' });
   }
