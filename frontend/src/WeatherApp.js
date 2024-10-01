@@ -27,25 +27,36 @@ function WeatherApp() {
   const [favorites, setFavorites] = useState([]);
   const [showAuthModal, setShowAuthModal] = useState(false);
 
-  useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    if (storedToken) {
-      setToken(storedToken);
-      setIsLoggedIn(true);
-      fetchFavorites(storedToken);
-    }
-  }, []);
+ // Use effect hook to check for stored token on component mount
+useEffect(() => {
+  // Retrieve stored token from local storage
+  const storedToken = localStorage.getItem('token');
+  
+  // If token exists, set token state and log in user
+  if (storedToken) {
+    setToken(storedToken);
+    setIsLoggedIn(true);
+    
+    // Fetch user's favorite data using the stored token
+    fetchFavorites(storedToken);
+  }
+}, []);
 
-  const fetchFavorites = async (token) => {
-    try {
-      const response = await axios.get('http://localhost:3001/favorites', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setFavorites(response.data);
-    } catch (error) {
-      console.error('Error fetching favorites:', error);
-    }
-  };
+// Function to fetch user's favorite data
+const fetchFavorites = async (token) => {
+  try {
+    // Send GET request to /favorites endpoint with token in Authorization header
+    const response = await axios.get('http://localhost:3001/favorites', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    
+    // Set favorites state with received data
+    setFavorites(response.data);
+  } catch (error) {
+    // Log any errors that occur during the fetch process
+    console.error('Error fetching favorites:', error);
+  }
+};
 
   const handleRegister = async () => {
     try {
