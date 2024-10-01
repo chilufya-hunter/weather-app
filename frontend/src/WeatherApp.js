@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './WeatherApp.css';
+import './AuthModal.css';
 
 function WeatherApp() {
   const [city, setCity] = useState('');
@@ -262,26 +263,28 @@ function WeatherApp() {
         )}
 
         {showAuthModal && (
-          <div className="weather-app__auth-modal">
-            <div className="weather-app__auth-modal-content">
+          <div className="auth-modal">
+            <div className="auth-modal-content">
               <h2>Login or Register</h2>
               <input
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Username"
-                className="weather-app__input"
+                className="auth-input"
               />
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
-                className="weather-app__input"
+                className="auth-input"
               />
-              <button onClick={handleRegister} className="weather-app__button">Register</button>
-              <button onClick={handleLogin} className="weather-app__button">Login</button>
-              <button onClick={() => setShowAuthModal(false)} className="weather-app__button">Cancel</button>
+              <div className="auth-buttons">
+                <button onClick={handleRegister} className="auth-button">Register</button>
+                <button onClick={handleLogin} className="auth-button">Login</button>
+              </div>
+              <button onClick={() => setShowAuthModal(false)} className="auth-close-button">Close</button>
             </div>
           </div>
         )}
