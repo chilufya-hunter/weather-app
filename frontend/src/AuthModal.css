@@ -8,6 +8,17 @@
     width: 100%;
     max-width: 300px; /* Adjust as needed */
   }
+  
+  /* Media query for mobile responsiveness */
+  @media (max-width: 480px) {
+    .auth-modal {
+      left: 0;
+      transform: translateX(0);
+      width: 100%;
+      max-width: none; /* Remove max-width restriction */
+    }
+    
+  }
   .auth-modal-content {
     background-color: #f4f4f4;
     padding: 20px;
