@@ -278,7 +278,7 @@ body {
 
 .weather-app__weather-info:nth-child(6)::before,
 .weather-app__forecast-info:nth-child(6)::before {
-  content: '\f0d6'; /* money-bills icon */
+  content: '\f0d6'; /* random icon */
 }
 
 

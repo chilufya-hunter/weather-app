@@ -1,0 +1,28 @@
+.weather-app__pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .weather-app__pagination-list {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .weather-app__pagination-item {
+    margin: 0 5px;
+  }
+  
+  .weather-app__pagination-link {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+    cursor: pointer;
+  }
+  
+  .weather-app__pagination-link.active {
+    background-color: #007bff;
+    color: white;
+  }
