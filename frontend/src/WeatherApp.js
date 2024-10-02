@@ -69,7 +69,7 @@ function WeatherApp() {
       alert('Registration failed.');
     }
   };
-
+// fucntion to handle login requests
   const handleLogin = async () => {
     try {
       const response = await axios.post('http://localhost:3001/login', { username, password });
@@ -85,6 +85,7 @@ function WeatherApp() {
     }
   };
 
+  // fucntion to handle logout requests
   const handleLogout = () => {
     setToken('');
     setIsLoggedIn(false);
@@ -304,8 +305,8 @@ function WeatherApp() {
         {isLoggedIn && (
           <button onClick={handleLogout} className="weather-app__button weather-app__button--logout">Logout</button>
         )}
-
-        {showAuthModal && (
+         
+        {showAuthModal && ( // this is the authentication modal component) when a users presses the add to favorite button, it will show this modal
           <div className="auth-modal">
             <div className="auth-modal-content">
               <h2>Login or Register</h2>
