@@ -1,12 +1,22 @@
+#Before you run this this webapp on your local machine or host you are supposed to have:
+## 1. An API key from https://www.weatherbit.io/. copy in and paste in the the .evn file which you will create in the backend folder.
+
+## 2. A jwt  secret key. You can generate one from https://www.jsonwebtoken.io/. copy in and paste in the .evn folder you created earlier
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
-In the project directory, you can run:
+In the project directory navigate to the backend folder and run:
+
+### `node server.js`
+
+In the project directory navigate to the frontend folder and run:
 
 ### `npm start`
+
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.

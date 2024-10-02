@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './WeatherApp.css';
-import './AuthModal.css'
+import './AuthModal.css';
+import './Pagination.css';
 
 function WeatherApp() {
   // City and country for weather search
@@ -27,41 +28,42 @@ function WeatherApp() {
   const [favorites, setFavorites] = useState([]);
   const [showAuthModal, setShowAuthModal] = useState(false);
 
- // Use effect hook to check for stored token on component mount
-useEffect(() => {
-  // Retrieve stored token from local storage
-  const storedToken = localStorage.getItem('token');
-  
-  // If token exists, set token state and log in user
-  if (storedToken) {
-    setToken(storedToken);
-    setIsLoggedIn(true);
-    
-    // Fetch user's favorite data using the stored token
-    fetchFavorites(storedToken);
-  }
-}, []);
+  // New state variables for pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [daysPerPage] = useState(5);
 
-// Function to fetch user's favorite data
-const fetchFavorites = async (token) => {
-  try {
-    // Send GET request to /favorites endpoint with token in Authorization header
-    const response = await axios.get('http://localhost:3001/favorites', {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    
-    // Set favorites state with received data
-    setFavorites(response.data);
-  } catch (error) {
-    // Log any errors that occur during the fetch process
-    console.error('Error fetching favorites:', error);
-  }
-};
+  const clearInputFields = () => {
+    setUsername('');
+    setPassword('');
+  };
+
+  // Use effect hook to check for stored token on component mount
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      setToken(storedToken);
+      setIsLoggedIn(true);
+      fetchFavorites(storedToken);
+    }
+  }, []);
+
+  // Function to fetch user's favorite data
+  const fetchFavorites = async (token) => {
+    try {
+      const response = await axios.get('http://localhost:3001/favorites', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setFavorites(response.data);
+    } catch (error) {
+      console.error('Error fetching favorites:', error);
+    }
+  };
 
   const handleRegister = async () => {
     try {
       await axios.post('http://localhost:3001/register', { username, password });
       alert('Registration successful. Please log in.');
+      clearInputFields(); // Clear input fields after successful registration
     } catch (error) {
       console.error('Error registering:', error);
       alert('Registration failed.');
@@ -76,6 +78,7 @@ const fetchFavorites = async (token) => {
       localStorage.setItem('token', response.data.accessToken);
       fetchFavorites(response.data.accessToken);
       setShowAuthModal(false);
+      clearInputFields(); // Clear input fields after successful registration
     } catch (error) {
       console.error('Error logging in:', error);
       alert('Login failed.');
@@ -87,6 +90,7 @@ const fetchFavorites = async (token) => {
     setIsLoggedIn(false);
     localStorage.removeItem('token');
     setFavorites([]);
+    clearInputFields(); // Clear input fields after successful registration
   };
 
   const handleSearch = async () => {
@@ -109,6 +113,7 @@ const fetchFavorites = async (token) => {
     }
 
     setSearchHistory([...searchHistory, { city, country }]);
+    setCurrentPage(1); // Reset to first page when new search is performed
   };
 
   const handleAddFavorite = async () => {
@@ -147,12 +152,19 @@ const fetchFavorites = async (token) => {
     }
   };
 
+  // Calculate indexes for pagination
+  const indexOfLastDay = currentPage * daysPerPage;
+  const indexOfFirstDay = indexOfLastDay - daysPerPage;
+  const currentDays = forecast && forecast.data ? forecast.data.slice(indexOfFirstDay, indexOfLastDay) : [];
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <div className="weather-app">
       <header className="weather-app__header">
-        <h1 className="weather-app__title">GNA </h1>
-      <img class="lnXdpd" alt="Google" height="180" width="300" src="./logo.png" />
-
+        <h1 className="weather-app__title">GNA</h1>
+        <img className="lnXdpd" alt="Google" height="180" width="300" src="./logo.png" />
       </header>
 
       <main className="weather-app__main">
@@ -210,9 +222,9 @@ const fetchFavorites = async (token) => {
           <div className="weather-app__forecast">
             {forecast && forecast.data && (
               <div className="weather-app__forecast-container">
-                <h2 className="weather-app__section-title">16-Day Forecast</h2>
+                <h2 className="weather-app__section-title">5-Day Forecast</h2>
                 <div className="weather-app__forecast-grid">
-                  {forecast.data.map((day, index) => (
+                  {currentDays.map((day, index) => (
                     <div key={index} className="weather-app__forecast-card">
                       <h3 className="weather-app__forecast-date">{day.datetime}</h3>
                       <p className="weather-app__forecast-info">Max Temp: {day.max_temp}°C</p>
@@ -223,6 +235,16 @@ const fetchFavorites = async (token) => {
                       <p className="weather-app__forecast-info">Wind Speed: {day.wind_spd} m/s</p>
                     </div>
                   ))}
+                </div>
+                <div className="weather-app__pagination">
+                  {forecast.data.length > daysPerPage && (
+                    <Pagination
+                      daysPerPage={daysPerPage}
+                      totalDays={forecast.data.length}
+                      paginate={paginate}
+                      currentPage={currentPage}
+                    />
+                  )}
                 </div>
               </div>
             )}
@@ -305,13 +327,42 @@ const fetchFavorites = async (token) => {
                 <button onClick={handleRegister} className="auth-button">Register</button>
                 <button onClick={handleLogin} className="auth-button">Login</button>
               </div>
-              <button onClick={() => setShowAuthModal(false)} className="auth-close-button">Close</button>
-            </div>
+              <button onClick={() => {
+                setShowAuthModal(false);
+                clearInputFields(); // Clear input fields when closing the modal
+            }} className="auth-close-button">Close</button>
           </div>
+        </div>
         )}
       </main>
     </div>
   );
 }
+
+// Pagination component, this will be displaying 5 entries per page
+const Pagination = ({ daysPerPage, totalDays, paginate, currentPage }) => {
+  const pageNumbers = [];
+
+  for (let i = 1; i <= Math.ceil(totalDays / daysPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
+  return (
+    <nav>
+      <ul className="weather-app__pagination-list">
+        {pageNumbers.map(number => (
+          <li key={number} className="weather-app__pagination-item">
+            <button
+              onClick={() => paginate(number)}
+              className={`weather-app__pagination-link ${currentPage === number ? 'active' : ''}`}
+            >
+              {number}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+};
 
 export default WeatherApp;
