@@ -1,60 +1,82 @@
-Weather App README
-Table of Contents
-Introduction
-Prerequisites
-Cloning the Repository
-Installing Dependencies
-Running the Application
-Troubleshooting
-Introduction
-Welcome to the Weather App repository! This web application allows users to search for current weather and forecast data for various cities around the world.
+# you can see the demo of the app on this link: https://disk.yandex.com/d/3daniSocoOn2DA
 
-Prerequisites
-Node.js (version 14 or higher)
-npm (version 6 or higher)
-Git (version 2 or higher)
-A GitHub account (for cloning the repository)
-Cloning the Repository
-Open a terminal or command prompt on your machine.
-Navigate to the directory where you want to clone the repository.
-Run the following command to clone the repository:
-bash
-Edit
-Copy code
-git clone https://github.com/your-username/weather-app.git
-Replace your-username with your actual GitHub username.
+# Before you run this this webapp on your local machine or host you are supposed to have:
+## 1. An API key from https://www.weatherbit.io/. copy in and paste in the the .evn file which you will create in the backend folder.
 
-Installing Dependencies
-Navigate to the cloned repository directory:
-bash
-Edit
-Copy code
-cd weather-app
-Run the following command to install the dependencies:
-bash
-Edit
-Copy code
-npm install
-This may take a few minutes to complete.
+## 2. A jwt  secret key. You can generate one from https://www.jsonwebtoken.io/. copy in and paste in the .evn folder you created earlier
 
-Running the Application
-Start the application by running the following command:
-bash
-Edit
-Copy code
-npm start
-Open a web browser and navigate to http://localhost:3000 to access the application.
-Troubleshooting
-If you encounter any issues during the installation or running of the application, check the console output for error messages.
-Make sure you have the latest version of Node.js and npm installed.
-If you're still having trouble, feel free to open an issue on the GitHub repository or reach out to the maintainers for assistance.
-API Endpoints
-The application uses the following API endpoints:
+# Getting Started with Create React App
 
-http://localhost:3001/current-weather for current weather data
-http://localhost:3001/forecast for forecast data
-http://localhost:3001/favorites for favorite cities data
-Note: These endpoints are only accessible when the application is running locally.
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-Contributing
-We welcome contributions to the Weather App repository! If you'd like to contribute, please fork the repository and submit a pull request with your changes.
+## Available Scripts
+
+In the project directory navigate to the backend folder and run:
+
+### `node server.js`
+
+In the project directory navigate to the frontend folder and run:
+
+### `npm start`
+
+
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
+
+### `npm test`
+
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
+### `npm run build`
+
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
+
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
+
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+### `npm run eject`
+
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
+
+### Code Splitting
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+
+### Analyzing the Bundle Size
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+
+### Making a Progressive Web App
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+
+### Advanced Configuration
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+
+### Deployment
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+
+### `npm run build` fails to minify
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
